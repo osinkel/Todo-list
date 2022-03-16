@@ -132,17 +132,17 @@ for (i = 0; i < types.length; i++) {
 			removeAllChildElements(tasks_list);
 			switch(this.children[0].innerHTML){
 				case "Completed":
-					changeTaskListTitle('Completed')
+					// changeTaskListTitle('Completed')
 					addAllChildElements(tasks_list, completed_tasks);
 					break;
 
 				case "In Progress":
-					changeTaskListTitle('In Progress');
+					// changeTaskListTitle('In Progress');
 					addAllChildElements(tasks_list, in_progress_tasks);
 					break;
 
 				case "Removed":
-					changeTaskListTitle('Removed');
+					//changeTaskListTitle('Removed');
 					addAllChildElements(tasks_list, removed_tasks);
 					break;
 			}
