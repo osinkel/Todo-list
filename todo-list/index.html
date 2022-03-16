@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Todo list</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	<div class="container">
+			<div class="welcome-date">
+				<div class="current-date"></div>
+				<div class="calendar"><img src="calendar.svg"> </div>
+				<div class="welcome"><p>hey, oleg</p></div>
+			</div>
+			<div id="new-task-form">
+				<input type="text" id="new-task-input" class="new-task-input" placeholder="What is your plan?">
+				<button class="accordion">
+					<div class="arrow-down"></div>
+				</button>
+			</div>
+			<div class="panel">
+				<ul>
+					<li class="type-item"><a href="#completed">Completed</a></li>
+					<li class="type-item active"><a href="#in_progress">In Progress</a></li>
+					<li class="type-item"><a href="#removed">Removed</a></li>
+				</ul>
+			</div>
+			<div class="tasks-list-block">
+				<h3 class="task-list-title">Upcoming To-do's</h3>
+				<hr>
+				<section id="tasks-list">
+<!-- 					<div id="1" class="task completed">
+						<div class="content">
+							<div class="round">
+							  <input type="checkbox" id="checkbox" checked />
+							  <label for="checkbox"></label>
+							</div>
+							<input type="text" class="text" value="my adslkklfjas dflkasdj fadkl;sfjasdkl;fjasdflk;jf asjdfl;akfj" readonly="readonly">
+							<div class="del-task"><input src="x-circle.svg" type="image"></div>
+						</div>
+					</div> -->
+				</section>
+				<button class="add-list-item">
+					<img src="plus-circle.svg">
+					Create New Item
+				</button>
+			</div>
+	</div>
+	<script src="main.js"></script>
+</body>
+</html>
