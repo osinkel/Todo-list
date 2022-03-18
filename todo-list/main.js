@@ -1,7 +1,7 @@
 let removed_tasks = [];
 let completed_tasks = [];
 let in_progress_tasks = [];
-
+let index = 0;
 const cur_day = document.querySelector('.current-date');
 cur_day.innerHTML = new Date().getDate();
 
@@ -19,8 +19,10 @@ acc.addEventListener("click", function() {
 	var panel = document.querySelector('.panel');
 	if (panel.style.maxHeight) {
 		panel.style.maxHeight = null;
+		tasks_list.style.maxHeight = '190px';
 	} else {
 		panel.style.maxHeight = panel.scrollHeight + "px";
+		tasks_list.style.maxHeight = '150px';
 	}
 });
 
@@ -41,6 +43,8 @@ add_task_btn.addEventListener('click', () => {
 	const task = task_content.value
 	
 	const task_el = document.createElement("div");
+	task_el.id = index;
+	index = index + 1;
 	task_el.classList.add("task");
 	cur_type = document.location.hash.slice(1);
 
@@ -48,7 +52,6 @@ add_task_btn.addEventListener('click', () => {
 	task_content_el.classList.add("content");
 
 	const task_input_el = document.createElement("input");
-	// task_input_el.classList.add("text");
 	task_input_el.type="text";
 	task_input_el.value=task;
 	task_input_el.setAttribute("readonly", "readonly")
@@ -60,7 +63,11 @@ add_task_btn.addEventListener('click', () => {
 	task_checkbox_input_el.type="checkbox";
 	task_checkbox_input_el.id="checkbox";
 
-	task_checkbox_input_el.addEventListener('click', () => {
+	const task_checkbox_label_el = document.createElement("label");
+	task_checkbox_label_el.setAttribute("for", "checkbox");
+
+	task_checkbox_el.appendChild(task_checkbox_input_el);
+	task_checkbox_label_el.addEventListener('click', () => {
 		task_checkbox_input_el.checked = 'true';
 		task_checkbox_input_el.disabled = 'true';
 		task_input_el.classList.add("text");
@@ -70,10 +77,6 @@ add_task_btn.addEventListener('click', () => {
 		completed_tasks.push(task_el);
 	});
 
-	const task_checkbox_label_el = document.createElement("label");
-	task_checkbox_label_el.setAttribute("for", "checkbox");
-
-	task_checkbox_el.appendChild(task_checkbox_input_el);
 	task_checkbox_el.appendChild(task_checkbox_label_el);
 
 	task_content_el.appendChild(task_checkbox_el);
@@ -115,7 +118,7 @@ function addAllChildElements(tasks_list, elements) {
 }
 
 function changeTaskListTitle(title_text){
-	title_el = document.querySelector('.tasks-list-title');
+	title_el = document.querySelector('.task-list-title');
 	title_el.innerHTML = title_text;
 }
 
@@ -132,17 +135,17 @@ for (i = 0; i < types.length; i++) {
 			removeAllChildElements(tasks_list);
 			switch(this.children[0].innerHTML){
 				case "Completed":
-					// changeTaskListTitle('Completed')
+					changeTaskListTitle("Completed To-do's")
 					addAllChildElements(tasks_list, completed_tasks);
 					break;
 
 				case "In Progress":
-					// changeTaskListTitle('In Progress');
+					changeTaskListTitle("Upcoming To-do's");
 					addAllChildElements(tasks_list, in_progress_tasks);
 					break;
 
 				case "Removed":
-					//changeTaskListTitle('Removed');
+					changeTaskListTitle("Removed To-do's");
 					addAllChildElements(tasks_list, removed_tasks);
 					break;
 			}
