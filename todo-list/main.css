@@ -268,6 +268,11 @@ input:checked {
 	margin-top: -3px;
 }
 
+.task {
+	padding-bottom: 3px;
+	padding-top: 2px;
+}
+
 .task input[type="text"]{
 	padding: 10px;
 	padding-left: 30px;
@@ -337,6 +342,8 @@ div.round {
 }
 
 .del-task{
+	width: 15px;
+	height: 15px;
 	position: relative;
 	margin-left: 185px;
 	margin-top: -24px;
