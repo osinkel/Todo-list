@@ -69,15 +69,15 @@ input:checked {
 }
 
 
-#t1: .appear{
+#t1 .appear{
 	left: 159px;
 }
 
-#t2: .appear{
+#t2 .appear{
 	left: 86px;
 }
 
-#t3: .appear{
+#t3 .appear{
 	left: 159px;
 }
 
@@ -344,16 +344,29 @@ div.round {
 .del-task{
 	width: 15px;
 	height: 15px;
-	position: relative;
+	position: absolute;
 	margin-left: 87%;
 	margin-top: -24px;
-	color: red;
 }
 
 .del-task input{
 	top: 5px;
-	height: 15px;
+	height: 100%;
+	width: 100%;
+}
+
+.recover-task{
 	width: 15px;
+	height: 15px;
+	position: absolute;;
+	margin-left: 2%;
+	margin-top: -24px;
+}
+
+.recover-task input{
+	top: 5px;
+	height: 100%;
+	width: 100%;
 }
 
 .text{

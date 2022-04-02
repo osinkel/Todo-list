@@ -86,15 +86,47 @@ add_task_btn.addEventListener('click', () => {
 	const task_delete_input_el = document.createElement("input");
 	task_delete_input_el.type="image";
 	task_delete_input_el.src="x-circle.svg"
+
 	task_delete_el.addEventListener('click', () => {
 		tasks_list.removeChild(task_el);
 		in_progress_tasks.splice(in_progress_tasks.indexOf(task_el), 1);
 		task_el.firstChild.removeChild(task_delete_el);
+		task_el.firstChild.appendChild(task_recover_el);
+		task_el.firstChild.appendChild(task_final_delete_el);
 		task_checkbox_el.children[1].style.visibility="hidden";
 		removed_tasks.push(task_el);
 	});
 	task_delete_el.appendChild(task_delete_input_el);
 	task_content_el.appendChild(task_delete_el);
+
+	const task_final_delete_el = document.createElement("div");
+	task_final_delete_el.classList.add("del-task");
+	const task_final_delete_input_el = document.createElement("input");
+	task_final_delete_input_el.type="image";
+	task_final_delete_input_el.src="x-circle.svg"
+	task_final_delete_el.appendChild(task_final_delete_input_el);
+
+	task_final_delete_el.addEventListener('click', () => {
+		tasks_list.removeChild(task_el);
+		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
+	});
+
+	const task_recover_el = document.createElement("div");
+	task_recover_el.classList.add("recover-task");
+	const task_recover_input_el = document.createElement("input");
+	task_recover_input_el.type="image";
+	task_recover_input_el.src="activity.svg"
+	task_recover_el.appendChild(task_recover_input_el);
+
+	task_recover_el.addEventListener('click', () => {
+		tasks_list.removeChild(task_el);
+		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
+		task_el.firstChild.removeChild(task_final_delete_el);
+		task_el.firstChild.removeChild(task_recover_el);
+		task_el.firstChild.appendChild(task_delete_el);
+		task_checkbox_el.children[1].style.visibility="visible";
+		in_progress_tasks.push(task_el);
+	});
 
 	task_el.appendChild(task_content_el);
 	in_progress_tasks.push(task_el);
