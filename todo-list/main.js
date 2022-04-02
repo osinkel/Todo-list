@@ -19,10 +19,10 @@ acc.addEventListener("click", function() {
 	var panel = document.querySelector('.panel');
 	if (panel.style.maxHeight) {
 		panel.style.maxHeight = null;
-		tasks_list.style.maxHeight = '190px';
+		tasks_list.style.maxHeight = '351px';
 	} else {
 		panel.style.maxHeight = panel.scrollHeight + "px";
-		tasks_list.style.maxHeight = '150px';
+		tasks_list.style.maxHeight = '311px';
 	}
 });
 
@@ -46,7 +46,6 @@ add_task_btn.addEventListener('click', () => {
 	task_el.id = index;
 	index = index + 1;
 	task_el.classList.add("task");
-	cur_type = document.location.hash.slice(1);
 
 	const task_content_el = document.createElement("div");
 	task_content_el.classList.add("content");
@@ -67,7 +66,7 @@ add_task_btn.addEventListener('click', () => {
 	task_checkbox_label_el.setAttribute("for", "checkbox");
 
 	task_checkbox_el.appendChild(task_checkbox_input_el);
-	task_checkbox_label_el.addEventListener('click', () => {
+	task_checkbox_label_el.addEventListener('click',() => {
 		task_checkbox_input_el.checked = 'true';
 		task_checkbox_input_el.disabled = 'true';
 		task_input_el.classList.add("text");
@@ -122,7 +121,6 @@ function changeTaskListTitle(title_text){
 	title_el.innerHTML = title_text;
 }
 
-window.location.hash="in_progress";
 types = document.getElementsByClassName("type-item");
 var i;
 for (i = 0; i < types.length; i++) {
