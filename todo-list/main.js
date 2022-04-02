@@ -46,7 +46,6 @@ add_task_btn.addEventListener('click', () => {
 	task_el.id = index;
 	index = index + 1;
 	task_el.classList.add("task");
-	cur_type = document.location.hash.slice(1);
 
 	const task_content_el = document.createElement("div");
 	task_content_el.classList.add("content");
@@ -87,15 +86,30 @@ add_task_btn.addEventListener('click', () => {
 	const task_delete_input_el = document.createElement("input");
 	task_delete_input_el.type="image";
 	task_delete_input_el.src="x-circle.svg"
+
 	task_delete_el.addEventListener('click', () => {
 		tasks_list.removeChild(task_el);
 		in_progress_tasks.splice(in_progress_tasks.indexOf(task_el), 1);
 		task_el.firstChild.removeChild(task_delete_el);
+		task_el.firstChild.appendChild(task_final_delete_el);
 		task_checkbox_el.children[1].style.visibility="hidden";
 		removed_tasks.push(task_el);
 	});
 	task_delete_el.appendChild(task_delete_input_el);
 	task_content_el.appendChild(task_delete_el);
+
+	const task_final_delete_el = document.createElement("div");
+	task_final_delete_el.classList.add("del-task");
+	const task_final_delete_input_el = document.createElement("input");
+	task_final_delete_input_el.type="image";
+	task_final_delete_input_el.src="x-circle.svg"
+	task_final_delete_el.appendChild(task_final_delete_input_el);
+
+	task_final_delete_el.addEventListener('click', () => {
+		tasks_list.removeChild(task_el);
+		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
+		task_checkbox_el.children[1].style.visibility="hidden";
+	});
 
 	task_el.appendChild(task_content_el);
 	in_progress_tasks.push(task_el);
@@ -122,7 +136,6 @@ function changeTaskListTitle(title_text){
 	title_el.innerHTML = title_text;
 }
 
-window.location.hash="in_progress";
 types = document.getElementsByClassName("type-item");
 var i;
 for (i = 0; i < types.length; i++) {
