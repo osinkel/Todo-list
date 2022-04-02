@@ -5,6 +5,12 @@ let index = 0;
 const cur_day = document.querySelector('.current-date');
 cur_day.innerHTML = new Date().getDate();
 
+console.log('s');
+
+const REMOVED = 'removed';
+const IN_PROGRESS = 'in_progress';
+const COMPLETED = 'completed';
+
 var acc = document.querySelector(".accordion");
 acc.addEventListener("click", function() {
 	this.classList.toggle("active");
@@ -66,14 +72,18 @@ add_task_btn.addEventListener('click', () => {
 	task_checkbox_label_el.setAttribute("for", "checkbox");
 
 	task_checkbox_el.appendChild(task_checkbox_input_el);
-	task_checkbox_label_el.addEventListener('click',() => {
-		task_checkbox_input_el.checked = 'true';
-		task_checkbox_input_el.disabled = 'true';
-		task_input_el.classList.add("text");
-		tasks_list.removeChild(task_el);
-		in_progress_tasks.splice(in_progress_tasks.indexOf(task_el), 1);
-		task_el.firstChild.removeChild(task_delete_el);
-		completed_tasks.push(task_el);
+	task_checkbox_label_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		switch (getActiveListName()) {
+			case COMPLETED:
+				tasks_list.removeChild(parentEl);
+				moveToUpcoming(parentEl, completed_tasks);
+				break;
+			case IN_PROGRESS:
+				tasks_list.removeChild(parentEl);
+				moveToCompleted(parentEl, in_progress_tasks);
+				break;
+		}
 	});
 
 	task_checkbox_el.appendChild(task_checkbox_label_el);
@@ -86,46 +96,38 @@ add_task_btn.addEventListener('click', () => {
 	const task_delete_input_el = document.createElement("input");
 	task_delete_input_el.type="image";
 	task_delete_input_el.src="x-circle.svg"
-
-	task_delete_el.addEventListener('click', () => {
-		tasks_list.removeChild(task_el);
-		in_progress_tasks.splice(in_progress_tasks.indexOf(task_el), 1);
-		task_el.firstChild.removeChild(task_delete_el);
-		task_el.firstChild.appendChild(task_recover_el);
-		task_el.firstChild.appendChild(task_final_delete_el);
-		task_checkbox_el.children[1].style.visibility="hidden";
-		removed_tasks.push(task_el);
+	task_delete_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		tasks_list.removeChild(parentEl);
+		switch (getActiveListName()) {
+			case COMPLETED:
+				moveToUpcoming(parentEl, completed_tasks);
+				break;
+			case REMOVED:
+				deleteFromList(parentEl, removed_tasks);
+				break;
+			case IN_PROGRESS:
+				moveToRemoved(parentEl, in_progress_tasks);
+				break;
+		}
 	});
 	task_delete_el.appendChild(task_delete_input_el);
 	task_content_el.appendChild(task_delete_el);
 
-	const task_final_delete_el = document.createElement("div");
-	task_final_delete_el.classList.add("del-task");
-	const task_final_delete_input_el = document.createElement("input");
-	task_final_delete_input_el.type="image";
-	task_final_delete_input_el.src="x-circle.svg"
-	task_final_delete_el.appendChild(task_final_delete_input_el);
-
-	task_final_delete_el.addEventListener('click', () => {
-		tasks_list.removeChild(task_el);
-		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
-	});
-
 	const task_recover_el = document.createElement("div");
 	task_recover_el.classList.add("recover-task");
+	task_recover_el.style.visibility = 'hidden';
 	const task_recover_input_el = document.createElement("input");
 	task_recover_input_el.type="image";
 	task_recover_input_el.src="activity.svg"
 	task_recover_el.appendChild(task_recover_input_el);
 
-	task_recover_el.addEventListener('click', () => {
-		tasks_list.removeChild(task_el);
-		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
-		task_el.firstChild.removeChild(task_final_delete_el);
-		task_el.firstChild.removeChild(task_recover_el);
-		task_el.firstChild.appendChild(task_delete_el);
-		task_checkbox_el.children[1].style.visibility="visible";
-		in_progress_tasks.push(task_el);
+	task_content_el.appendChild(task_recover_el);
+
+	task_recover_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		tasks_list.removeChild(parentEl);
+		moveToUpcoming(parentEl, removed_tasks);
 	});
 
 	task_el.appendChild(task_content_el);
@@ -153,6 +155,65 @@ function changeTaskListTitle(title_text){
 	title_el.innerHTML = title_text;
 }
 
+function moveToCompleted(element, list_from) {
+	const checkboxEl = element.querySelector('#checkbox');
+	checkboxEl.checked = true;
+	checkboxEl.disabled = true;
+	const textEl = element.querySelector('[type="text"]');
+	textEl.classList.add('text');
+	const delButtonEl = element.querySelector('.del-task');
+	delButtonEl.style.visibility = 'hidden';
+	moveElement(element, list_from, completed_tasks);
+}
+
+function moveToUpcoming(element, list_from) {
+	if (list_from === completed_tasks) {
+		const checkboxEl = element.querySelector('#checkbox');
+		checkboxEl.checked = false;
+		checkboxEl.disabled = false;
+		const textEl = element.querySelector('[type="text"]');
+		textEl.classList.remove('text');
+		const delButtonEl = element.querySelector('.del-task');
+		delButtonEl.style.visibility = 'visible';
+	} else if (list_from === removed_tasks) {
+		const checkboxLabelEl = element.querySelector('label');
+		checkboxLabelEl.style.visibility = 'visible';
+		const recoverButton = element.querySelector('.recover-task');
+		recoverButton.style.visibility = 'hidden';
+	}
+	moveElement(element, list_from, in_progress_tasks);
+}
+
+function moveToRemoved(element, list_from) {
+	const checkboxLabelEl = element.querySelector('label');
+	checkboxLabelEl.style.visibility = 'hidden';
+	const recoverButton = element.querySelector('.recover-task');
+	recoverButton.style.visibility = 'visible';
+	moveElement(element, list_from, removed_tasks);
+}
+
+function moveElement(element, list_from, list_to) {
+	deleteFromList(element, list_from);
+	addToList(element, list_to);
+}
+
+function deleteFromList(element, list_from) {
+	list_from.splice(list_from.indexOf(element), 1);
+}
+
+function addToList(element, list_to){
+	list_to.push(element);
+}
+
+function getActiveListName() {
+	const activeListEl = document.querySelector('li.active');
+	if (activeListEl.classList.contains(REMOVED)) return REMOVED;
+	if (activeListEl.classList.contains(IN_PROGRESS)) return IN_PROGRESS;
+	return COMPLETED;
+}
+
+window.location.hash="in_progress";
+
 types = document.getElementsByClassName("type-item");
 var i;
 for (i = 0; i < types.length; i++) {
@@ -166,17 +227,17 @@ for (i = 0; i < types.length; i++) {
 			switch(this.children[0].innerHTML){
 				case "Completed":
 					changeTaskListTitle("Completed To-do's")
-					addAllChildElements(tasks_list, completed_tasks);
+					addAllChildElements(tasks_list, completed_tasks, 'completed');
 					break;
 
 				case "In Progress":
 					changeTaskListTitle("Upcoming To-do's");
-					addAllChildElements(tasks_list, in_progress_tasks);
+					addAllChildElements(tasks_list, in_progress_tasks, 'upcoming');
 					break;
 
 				case "Removed":
 					changeTaskListTitle("Removed To-do's");
-					addAllChildElements(tasks_list, removed_tasks);
+					addAllChildElements(tasks_list, removed_tasks, 'removed');
 					break;
 			}
 		}

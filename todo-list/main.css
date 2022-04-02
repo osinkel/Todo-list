@@ -11,6 +11,7 @@
 	height: 490px;
 	background: #E4FFFC;
 	border-radius: 11px;
+	box-shadow: 0 0 10px 1px rgba(0,0,0,0.2);
 }
 
 #new-task-form{
