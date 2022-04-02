@@ -114,33 +114,20 @@ add_task_btn.addEventListener('click', () => {
 	task_delete_el.appendChild(task_delete_input_el);
 	task_content_el.appendChild(task_delete_el);
 
-	const task_final_delete_el = document.createElement("div");
-	task_final_delete_el.classList.add("del-task");
-	const task_final_delete_input_el = document.createElement("input");
-	task_final_delete_input_el.type="image";
-	task_final_delete_input_el.src="x-circle.svg"
-	task_final_delete_el.appendChild(task_final_delete_input_el);
-
-	task_final_delete_el.addEventListener('click', () => {
-		tasks_list.removeChild(task_el);
-		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
-	});
-
 	const task_recover_el = document.createElement("div");
 	task_recover_el.classList.add("recover-task");
+	task_recover_el.style.visibility = 'hidden';
 	const task_recover_input_el = document.createElement("input");
 	task_recover_input_el.type="image";
 	task_recover_input_el.src="activity.svg"
 	task_recover_el.appendChild(task_recover_input_el);
 
-	task_recover_el.addEventListener('click', () => {
-		tasks_list.removeChild(task_el);
-		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
-		task_el.firstChild.removeChild(task_final_delete_el);
-		task_el.firstChild.removeChild(task_recover_el);
-		task_el.firstChild.appendChild(task_delete_el);
-		task_checkbox_el.children[1].style.visibility="visible";
-		in_progress_tasks.push(task_el);
+	task_content_el.appendChild(task_recover_el);
+
+	task_recover_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		tasks_list.removeChild(parentEl);
+		moveToUpcoming(parentEl, removed_tasks);
 	});
 
 	task_el.appendChild(task_content_el);
@@ -191,6 +178,8 @@ function moveToUpcoming(element, list_from) {
 	} else if (list_from === removed_tasks) {
 		const checkboxLabelEl = element.querySelector('label');
 		checkboxLabelEl.style.visibility = 'visible';
+		const recoverButton = element.querySelector('.recover-task');
+		recoverButton.style.visibility = 'hidden';
 	}
 	moveElement(element, list_from, in_progress_tasks);
 }
@@ -198,6 +187,8 @@ function moveToUpcoming(element, list_from) {
 function moveToRemoved(element, list_from) {
 	const checkboxLabelEl = element.querySelector('label');
 	checkboxLabelEl.style.visibility = 'hidden';
+	const recoverButton = element.querySelector('.recover-task');
+	recoverButton.style.visibility = 'visible';
 	moveElement(element, list_from, removed_tasks);
 }
 
