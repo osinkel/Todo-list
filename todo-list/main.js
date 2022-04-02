@@ -19,10 +19,10 @@ acc.addEventListener("click", function() {
 	var panel = document.querySelector('.panel');
 	if (panel.style.maxHeight) {
 		panel.style.maxHeight = null;
-		tasks_list.style.maxHeight = '190px';
+		tasks_list.style.maxHeight = '351px';
 	} else {
 		panel.style.maxHeight = panel.scrollHeight + "px";
-		tasks_list.style.maxHeight = '150px';
+		tasks_list.style.maxHeight = '311px';
 	}
 });
 
@@ -66,7 +66,7 @@ add_task_btn.addEventListener('click', () => {
 	task_checkbox_label_el.setAttribute("for", "checkbox");
 
 	task_checkbox_el.appendChild(task_checkbox_input_el);
-	task_checkbox_label_el.addEventListener('click', () => {
+	task_checkbox_label_el.addEventListener('click',() => {
 		task_checkbox_input_el.checked = 'true';
 		task_checkbox_input_el.disabled = 'true';
 		task_input_el.classList.add("text");
@@ -112,12 +112,10 @@ add_task_btn.addEventListener('click', () => {
 	});
 
 	const task_recover_el = document.createElement("div");
-	// TODO: fix recover-task styles to avoid overlapping with Delete button
 	task_recover_el.classList.add("recover-task");
 	const task_recover_input_el = document.createElement("input");
 	task_recover_input_el.type="image";
-	// TODO: Replace image with some "Return arrow"
-	task_recover_input_el.src="plus-circle.svg"
+	task_recover_input_el.src="activity.svg"
 	task_recover_el.appendChild(task_recover_input_el);
 
 	task_recover_el.addEventListener('click', () => {
