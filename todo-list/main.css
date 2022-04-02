@@ -356,6 +356,15 @@ div.round {
 	width: 15px;
 }
 
+.recover-task{
+	width: 15px;
+	height: 15px;
+	position: relative;
+	margin-left: 185px;
+	margin-top: -24px;
+	color: red;
+}
+
 .text{
 	text-decoration: line-through;
 }

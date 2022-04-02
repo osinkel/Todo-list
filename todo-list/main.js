@@ -91,6 +91,7 @@ add_task_btn.addEventListener('click', () => {
 		tasks_list.removeChild(task_el);
 		in_progress_tasks.splice(in_progress_tasks.indexOf(task_el), 1);
 		task_el.firstChild.removeChild(task_delete_el);
+		task_el.firstChild.appendChild(task_recover_el);
 		task_el.firstChild.appendChild(task_final_delete_el);
 		task_checkbox_el.children[1].style.visibility="hidden";
 		removed_tasks.push(task_el);
@@ -108,7 +109,25 @@ add_task_btn.addEventListener('click', () => {
 	task_final_delete_el.addEventListener('click', () => {
 		tasks_list.removeChild(task_el);
 		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
-		task_checkbox_el.children[1].style.visibility="hidden";
+	});
+
+	const task_recover_el = document.createElement("div");
+	// TODO: fix recover-task styles to avoid overlapping with Delete button
+	task_recover_el.classList.add("recover-task");
+	const task_recover_input_el = document.createElement("input");
+	task_recover_input_el.type="image";
+	// TODO: Replace image with some "Return arrow"
+	task_recover_input_el.src="plus-circle.svg"
+	task_recover_el.appendChild(task_recover_input_el);
+
+	task_recover_el.addEventListener('click', () => {
+		tasks_list.removeChild(task_el);
+		removed_tasks.splice(removed_tasks.indexOf(task_el), 1);
+		task_el.firstChild.removeChild(task_final_delete_el);
+		task_el.firstChild.removeChild(task_recover_el);
+		task_el.firstChild.appendChild(task_delete_el);
+		task_checkbox_el.children[1].style.visibility="visible";
+		in_progress_tasks.push(task_el);
 	});
 
 	task_el.appendChild(task_content_el);
