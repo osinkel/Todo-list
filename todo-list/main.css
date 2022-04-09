@@ -11,6 +11,7 @@
 	height: 490px;
 	background: #E4FFFC;
 	border-radius: 11px;
+	box-shadow: 0 0 10px 1px rgba(0,0,0,0.2);
 }
 
 #new-task-form{
@@ -29,7 +30,7 @@
 #new-task-input{
 	background: #EEEEEE;
 	position: absolute;
-	width: 141px;
+	width: 78%;
 	height: 27px;
 	left: 15px;
 	top: 2.5px;
@@ -42,50 +43,6 @@
 	border:  none;
 	outline: none;
 }
-
-input:checked {
-     background: red;
-}
-
-
-.clickable input:checked ~ .appear {
-  display: inline-block;
-	background: #BFEBE6;
-	box-shadow: 2px 4px 6px #447B75;
-	border-radius: 10px;
-	font-family: Rationale;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	line-height: 12px;
-}
-
-.clickable .appear { 
-	display: none;
-	font-family: Arial, sans-serif;
-	background: black;
-	color: #fff;
-	padding: 10px;
-}
-
-
-#t1 .appear{
-	left: 159px;
-}
-
-#t2 .appear{
-	left: 86px;
-}
-
-#t3 .appear{
-	left: 159px;
-}
-
-.clickable input {
-    display: none;
-   	outline: none;
-}
-
 
 .arrow-block{
 	float: right;
