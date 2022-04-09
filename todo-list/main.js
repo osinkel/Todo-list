@@ -5,8 +5,6 @@ let index = 0;
 const cur_day = document.querySelector('.current-date');
 cur_day.innerHTML = new Date().getDate();
 
-console.log('s');
-
 const REMOVED = 'removed';
 const IN_PROGRESS = 'in_progress';
 const COMPLETED = 'completed';
