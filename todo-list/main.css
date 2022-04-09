@@ -5,15 +5,18 @@
 
 .container {
 	position: relative;
-	width: 234px;
-	height: 327px;
+	width: 351px;
+	margin: auto;
+	margin-top: 8%;
+	height: 490px;
 	background: #E4FFFC;
 	border-radius: 11px;
+	box-shadow: 0 0 10px 1px rgba(0,0,0,0.2);
 }
 
 #new-task-form{
 	position: relative;
-	width: 208px;
+	width: 92%;
 	height: 35px;
 	left: 13px;
 	top: 35px;
@@ -27,7 +30,7 @@
 #new-task-input{
 	background: #EEEEEE;
 	position: absolute;
-	width: 141px;
+	width: 78%;
 	height: 27px;
 	left: 15px;
 	top: 2.5px;
@@ -36,55 +39,10 @@
 	font-weight: normal;
 	font-size: 18px;
 	line-height: 27px;
-	/* identical to box height */
 	color: #254E49;
 	border:  none;
 	outline: none;
 }
-
-input:checked {
-     background: red;
-}
-
-
-.clickable input:checked ~ .appear {
-  display: inline-block;
-	background: #BFEBE6;
-	box-shadow: 2px 4px 6px #447B75;
-	border-radius: 10px;
-	font-family: Rationale;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 10px;
-	line-height: 12px;
-}
-
-.clickable .appear { 
-	display: none;
-	font-family: Arial, sans-serif;
-	background: black;
-	color: #fff;
-	padding: 10px;
-}
-
-
-#t1: .appear{
-	left: 159px;
-}
-
-#t2: .appear{
-	left: 86px;
-}
-
-#t3: .appear{
-	left: 159px;
-}
-
-.clickable input {
-    display: none;
-   	outline: none;
-}
-
 
 .arrow-block{
 	float: right;
@@ -124,7 +82,6 @@ input:checked {
 	cursor: pointer;
 	outline: none;
 	transition: 0.4s;
-  	float: right;
 	width: 43px;
 	height: 35px;
 	background: #447B75;
@@ -133,13 +90,14 @@ input:checked {
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 	margin-top: -1px;
+	margin-left:  87%;
 }
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
 	position: relative;
 	margin-top: 40px;
-	width: 208px;
+	width: 90%;
 	max-height: 0;
 	left: 13px;
 	overflow: hidden;
@@ -152,9 +110,10 @@ input:checked {
 	background: #BFEBE6;
 	box-shadow: 2px 4px 6px #447B75;
 	border-radius: 10px;
-	width: 62px;
+	width: 32%;
 	height: 30px;
 	margin-bottom: 10px;
+	text-align: center;
 }
 
 .type-item a{
@@ -164,8 +123,7 @@ input:checked {
 	font-style: normal;
 	font-weight: 400;
 	font-size: 10px;
-	line-height: 12px;
-	margin-left: 8px;
+	line-height: 29px;
 }
 
 
@@ -205,7 +163,7 @@ input:checked {
 #tasks-list{
 	position: relative;
 	overflow-y: scroll;
-	max-height: 190px;
+	max-height: 351px;
 	padding-bottom: 15px;
 }
 
@@ -263,9 +221,8 @@ input:checked {
 }
 
 .add-list-item img{
-	position: fixed;
-	margin-left: -23.5px;
-	margin-top: -3px;
+	position: relative;
+	top:  4px;
 }
 
 .task {
@@ -281,7 +238,7 @@ input:checked {
 	outline: none;
 	border-radius: 5px;
 	border: none;
-	width: 213px;
+	width: 94%;
 	font-family: 'Rationale';
 	font-style: normal;
 	font-weight: 400;
@@ -344,16 +301,29 @@ div.round {
 .del-task{
 	width: 15px;
 	height: 15px;
-	position: relative;
-	margin-left: 185px;
+	position: absolute;
+	margin-left: 87%;
 	margin-top: -24px;
-	color: red;
 }
 
 .del-task input{
 	top: 5px;
-	height: 15px;
+	height: 100%;
+	width: 100%;
+}
+
+.recover-task{
 	width: 15px;
+	height: 15px;
+	position: absolute;;
+	margin-left: 2%;
+	margin-top: -24px;
+}
+
+.recover-task input{
+	top: 5px;
+	height: 100%;
+	width: 100%;
 }
 
 .text{
@@ -361,8 +331,8 @@ div.round {
 }
 
 .current-date{
-	position: fixed;
-	margin-left: 3px;
+	position: absolute;
+	margin-left: 5.5px;
 	margin-top: 1px;
 	font-size: 9px;
 }
