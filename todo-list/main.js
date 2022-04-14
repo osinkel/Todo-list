@@ -210,8 +210,6 @@ function getActiveListName() {
 	return COMPLETED;
 }
 
-window.location.hash="in_progress";
-
 types = document.getElementsByClassName("type-item");
 var i;
 for (i = 0; i < types.length; i++) {
