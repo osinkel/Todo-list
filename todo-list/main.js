@@ -4,7 +4,7 @@ let in_progress_tasks = [];
 let index = 0;
 const cur_day = document.querySelector('.current-date');
 cur_day.innerHTML = new Date().getDate();
-const base_url = 'http://localhost:8080'
+const base_url = 'https://to-do-list-gr.herokuapp.com'
 const REMOVED = 'removed';
 const IN_PROGRESS = 'in_progress';
 const COMPLETED = 'completed';
@@ -411,7 +411,7 @@ function getAllAction(list_name){
 
 function deleteAction(id, id_user){
 	$.ajax({
-		url: base_url+'?userId='+id_user+'&taskId='+id,
+		url: base_url+'/task?userId='+id_user+'&taskId='+id,
 		method: 'DELETE',
 	});
 }
