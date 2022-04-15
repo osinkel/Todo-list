@@ -270,7 +270,7 @@ function create_task(){
 	in_progress_tasks.push(task_el);
 	removeAllChildElements(tasks_list);
 	addAllChildElements(tasks_list, in_progress_tasks);
-	createAction(task_el.id, task, status);
+	createAction(task, task_el);
 }
 
 
@@ -382,10 +382,12 @@ for (i = 0; i < types.length; i++) {
 	});
 }
 
-function createAction(id, task, status){
+function createAction(task_text, task_el){
 	$.ajax({
-		url: base_url+'/task?text='+task+'&userId='+id_user,
+		url: base_url+'/task?text='+task_text+'&userId='+id_user,
 		method: 'POST',
+		success: function(response)
+			task_el.id = response.id;
 	});
 }
 
@@ -411,7 +413,8 @@ function getAllAction(list_name){
 
 function deleteAction(id, id_user){
 	$.ajax({
-		url: base_url+'/task?userId='+id_user+'&taskId='+id,
+		url: base_url+'?userId='+id_user+'&taskId='+id,
 		method: 'DELETE',
 	});
+
 }

@@ -4,12 +4,16 @@ let in_progress_tasks = [];
 let index = 0;
 const cur_day = document.querySelector('.current-date');
 cur_day.innerHTML = new Date().getDate();
-
-console.log('s');
-
+const base_url = 'https://to-do-list-gr.herokuapp.com'
 const REMOVED = 'removed';
 const IN_PROGRESS = 'in_progress';
 const COMPLETED = 'completed';
+let id_user = localStorage.getItem('id_user');
+
+if(!id_user){
+	id_user = `f${(+new Date).toString(16)}`;
+	localStorage.setItem('id_user', id_user);
+}
 
 var acc = document.querySelector(".accordion");
 acc.addEventListener("click", function() {
@@ -33,10 +37,140 @@ acc.addEventListener("click", function() {
 });
 
 let tasks_list = document.querySelector("#tasks-list");
-
+get_tasks_from_db();
 const add_task_btn = document.querySelector(".add-list-item");
+add_task_btn.addEventListener('click', create_task);
 
-add_task_btn.addEventListener('click', () => {
+
+function get_tasks_from_db(){
+	getAllAction(REMOVED);
+	getAllAction(IN_PROGRESS);
+	getAllAction(COMPLETED);
+}
+
+
+function initialize_tasks(status, tasks_arr){
+	for(var i = 0; i<tasks_arr.length; i++){
+		load_task(tasks_arr[i].id, tasks_arr[i].text, status);
+	}
+}
+
+function load_task(id, task_text, status){
+
+	let task_el = document.createElement("div");
+	task_el.id = id;
+	task_el.classList.add("task");
+	const task_content_el = document.createElement("div");
+	task_content_el.classList.add("content");
+
+	const task_input_el = document.createElement("input");
+	task_input_el.type="text";
+	task_input_el.value=task_text;
+	task_input_el.setAttribute("readonly", "readonly")
+
+	const task_checkbox_el = document.createElement("div");
+	task_checkbox_el.classList.add("round")
+
+	const task_checkbox_input_el = document.createElement("input");
+	task_checkbox_input_el.type="checkbox";
+	task_checkbox_input_el.id="checkbox";
+
+	const task_checkbox_label_el = document.createElement("label");
+	task_checkbox_label_el.setAttribute("for", "checkbox");
+	switch(status){
+		case REMOVED:
+			task_checkbox_label_el.style.visibility = 'hidden';
+			break;
+		case COMPLETED:
+			task_checkbox_input_el.checked = true;
+			task_checkbox_input_el.disabled = true;
+			task_input_el.classList.add('text');
+			break;
+
+	}
+	task_checkbox_el.appendChild(task_checkbox_input_el);
+	task_checkbox_label_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		switch (getActiveListName()) {
+			case COMPLETED:
+				tasks_list.removeChild(parentEl);
+				moveToUpcoming(parentEl, completed_tasks);
+				break;
+			case IN_PROGRESS:
+				tasks_list.removeChild(parentEl);
+				moveToCompleted(parentEl, in_progress_tasks);
+				break;
+		}
+	});
+
+	task_checkbox_el.appendChild(task_checkbox_label_el);
+
+	task_content_el.appendChild(task_checkbox_el);
+	task_content_el.appendChild(task_input_el);
+
+	const task_delete_el = document.createElement("div");
+	task_delete_el.classList.add("del-task");
+	const task_delete_input_el = document.createElement("input");
+	task_delete_input_el.type="image";
+	task_delete_input_el.src="x-circle.svg"
+	task_delete_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		tasks_list.removeChild(parentEl);
+		switch (getActiveListName()) {
+			case COMPLETED:
+				moveToUpcoming(parentEl, completed_tasks);
+				break;
+			case REMOVED:
+				deleteFromList(parentEl, removed_tasks);
+				deleteAction(parentEl.id, id_user)
+				break;
+			case IN_PROGRESS:
+				moveToRemoved(parentEl, in_progress_tasks);
+				break;
+		}
+	});
+	task_delete_el.appendChild(task_delete_input_el);
+	task_content_el.appendChild(task_delete_el);
+
+	const task_recover_el = document.createElement("div");
+	task_recover_el.classList.add("recover-task");
+	task_recover_el.style.visibility = 'hidden';
+	const task_recover_input_el = document.createElement("input");
+	task_recover_input_el.type="image";
+	task_recover_input_el.src="activity.svg"
+	task_recover_el.appendChild(task_recover_input_el);
+	switch(status){
+		case REMOVED:
+			task_recover_el.style.visibility = 'visible';
+			break;
+		case COMPLETED:
+			task_delete_el.style.visibility = 'hidden';
+	}
+
+	task_content_el.appendChild(task_recover_el);
+
+	task_recover_el.addEventListener('click', (e) => {
+		const parentEl = e.currentTarget.closest('.task');
+		tasks_list.removeChild(parentEl);
+		moveToUpcoming(parentEl, removed_tasks);
+	});
+	task_el.appendChild(task_content_el);
+	switch(status){
+		case REMOVED:
+			addToList(task_el, removed_tasks);
+			break;
+		case IN_PROGRESS:
+			addToList(task_el, in_progress_tasks);
+			removeAllChildElements(tasks_list)
+			addAllChildElements(tasks_list, in_progress_tasks);
+			break;
+		case COMPLETED:
+			addToList(task_el, completed_tasks);
+			break;
+	}
+}
+
+function create_task(){
 	types = document.getElementsByClassName("type-item");
 	if(!types[1].classList.contains('active')){
 		types[0].classList.remove('active');
@@ -82,6 +216,7 @@ add_task_btn.addEventListener('click', () => {
 			case IN_PROGRESS:
 				tasks_list.removeChild(parentEl);
 				moveToCompleted(parentEl, in_progress_tasks);
+				
 				break;
 		}
 	});
@@ -105,6 +240,7 @@ add_task_btn.addEventListener('click', () => {
 				break;
 			case REMOVED:
 				deleteFromList(parentEl, removed_tasks);
+				deleteAction(element.id, id_user);
 				break;
 			case IN_PROGRESS:
 				moveToRemoved(parentEl, in_progress_tasks);
@@ -134,7 +270,8 @@ add_task_btn.addEventListener('click', () => {
 	in_progress_tasks.push(task_el);
 	removeAllChildElements(tasks_list);
 	addAllChildElements(tasks_list, in_progress_tasks);
-});
+	createAction(task, task_el);
+}
 
 
 function removeAllChildElements(parent) {
@@ -164,6 +301,7 @@ function moveToCompleted(element, list_from) {
 	const delButtonEl = element.querySelector('.del-task');
 	delButtonEl.style.visibility = 'hidden';
 	moveElement(element, list_from, completed_tasks);
+	updateAction(element.id, COMPLETED);
 }
 
 function moveToUpcoming(element, list_from) {
@@ -182,6 +320,7 @@ function moveToUpcoming(element, list_from) {
 		recoverButton.style.visibility = 'hidden';
 	}
 	moveElement(element, list_from, in_progress_tasks);
+	updateAction(element.id, IN_PROGRESS);
 }
 
 function moveToRemoved(element, list_from) {
@@ -190,6 +329,7 @@ function moveToRemoved(element, list_from) {
 	const recoverButton = element.querySelector('.recover-task');
 	recoverButton.style.visibility = 'visible';
 	moveElement(element, list_from, removed_tasks);
+	updateAction(element.id, REMOVED);
 }
 
 function moveElement(element, list_from, list_to) {
@@ -212,8 +352,6 @@ function getActiveListName() {
 	return COMPLETED;
 }
 
-window.location.hash="in_progress";
-
 types = document.getElementsByClassName("type-item");
 var i;
 for (i = 0; i < types.length; i++) {
@@ -227,19 +365,56 @@ for (i = 0; i < types.length; i++) {
 			switch(this.children[0].innerHTML){
 				case "Completed":
 					changeTaskListTitle("Completed To-do's")
-					addAllChildElements(tasks_list, completed_tasks, 'completed');
+					addAllChildElements(tasks_list, completed_tasks);
 					break;
 
 				case "In Progress":
 					changeTaskListTitle("Upcoming To-do's");
-					addAllChildElements(tasks_list, in_progress_tasks, 'upcoming');
+					addAllChildElements(tasks_list, in_progress_tasks);
 					break;
 
 				case "Removed":
 					changeTaskListTitle("Removed To-do's");
-					addAllChildElements(tasks_list, removed_tasks, 'removed');
+					addAllChildElements(tasks_list, removed_tasks);
 					break;
 			}
 		}
 	});
+}
+
+function createAction(task_text, task_el){
+	$.ajax({
+		url: base_url+'/task?text='+task_text+'&userId='+id_user,
+		method: 'POST',
+		success: function(response)
+			task_el.id = response.id;
+	});
+}
+
+function updateAction(id, status){
+	$.ajax({
+		url: base_url+'/task?taskId='+id+'&status='+status+'&userId='+id_user,
+		method: 'PUT',
+		success: function(response){
+
+		}
+	})
+}
+
+function getAllAction(list_name){
+	$.ajax({
+		url: base_url+'/list?name='+list_name+'&userId='+id_user,
+		method: 'GET',
+		success: function(response){
+			initialize_tasks(list_name, response);
+		}
+	});
+}
+
+function deleteAction(id, id_user){
+	$.ajax({
+		url: base_url+'?userId='+id_user+'&taskId='+id,
+		method: 'DELETE',
+	});
+
 }
