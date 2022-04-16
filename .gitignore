@@ -30,3 +30,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+firebase
+
+firebase/
+
+firebase/*
+
+/firebase/firebase_config.js
+
+public
